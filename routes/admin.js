@@ -9,13 +9,14 @@ const products = [];
 
 // /admin/add-product => GET
 router.get('/add-product', (req, res, next) => {
-  res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
+  // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
+  res.render('add-product')
 });
 
 // /admin/add-product => POST
 router.post('/add-product', (req, res, next) => {
   products.push({title:req.body.title});
-  res.redirect('/');
+  res.redirect('/shop');
 });
 
 module.exports = {router, products};

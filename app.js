@@ -16,10 +16,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')))
 
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
+app.use('/shop',shopRoutes);
 
 app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+    // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+    res.status(404).render('404', {pageHeading:"Page Not Found",docTitle:"404"});
 });
 
-app.listen(3000);
+app.listen(3000,()=>{
+    console.log("listening on port 3000");
+});
