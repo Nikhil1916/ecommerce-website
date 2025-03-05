@@ -10,7 +10,11 @@ const errorController = require("./controllers/error");
 
 //handlebars
 //for express handlebar we need to tell express it exists for pug we dont as it is kind of built in
-app.engine("handlebars",engine({  layoutsDir:'views/layout', defaultLayout: 'main-layout' }));
+app.engine("handlebars", engine({
+    layoutsDir: 'views/layout', defaultLayout: 'main-layout', helpers: {
+        eq: (a, b) => a === b
+    }
+}));
 app.set('view engine', 'handlebars');
 app.set('views', 'views');
 

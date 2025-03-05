@@ -10,22 +10,17 @@ const addProduct = (req, res, next) => {
     res.redirect('/shop');
 }
 
-const getProducts = (req, res, next) => {
-    // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    //rrs.render is add default by express and it will use the default template engone which we set in app.js
-    // const products = adminData.products;
+const getProducts = (req,res,next) => {
     Product.fetchAll((data)=>{
-        res.render('shop/product-list', {
+        res.render('admin/product-list', {
             prods: data,
             docTitle: 'Shop',
-            activeShop: true,
-            priductCss: true
+            priductCss: true,
+            path:"admin/products"
         })
     });
 }
 
 module.exports = {
-    getAddProduct,
-    addProduct,
-    getProducts
+    getAddProduct, addProduct, getProducts
 }

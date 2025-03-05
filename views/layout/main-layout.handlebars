@@ -19,11 +19,11 @@
     <header class="main-header">
         <nav class="main-header__nav">
             <ul class="main-header__item-list">
-                <li class="main-header__item"><a class="{{#if activeShop}}active{{/if}}" href="/shop">Shop</a></li>
-                <li class="main-header__item"><a class="{{#if activeProducts}}active{{/if}}" href="/products">Products</a></li>
-                <li class="main-header__item"><a class="{{#if activeCart}}active{{/if}}" href="/cart">Cart</a></li>
-                <li class="main-header__item"><a class="{{#if activeAddProduct}}active{{/if}}" href="/admin/add-product">Add Product</a></li>
-                <li class="main-header__item"><a class="{{#if activeAddProduct}}active{{/if}}" href="/admin/products">Admin Products</a></li>
+                <li class="main-header__item"><a class="{{#if (eq path '/shop')}}active{{/if}}" href="/shop">Shop</a></li>
+                <li class="main-header__item"><a class="{{#if (eq path '/shop/products')}}active{{/if}}" href="/shop/products">Products</a></li>
+                <li class="main-header__item"><a class="{{#if (eq path '/shop/cart')}}active{{/if}}" href="/shop/cart">Cart</a></li>
+                <li class="main-header__item"><a class="{{#if (eq path '/admin/add-product')}}active{{/if}}" href="/admin/add-product">Add Product</a></li>
+                <li class="main-header__item"><a class="{{#if (eq path '/admin/products')}}active{{/if}}" href="/admin/products">Admin Products</a></li>
             </ul>
         </nav>
     </header>
