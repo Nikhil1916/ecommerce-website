@@ -3,20 +3,13 @@ const path = require('path');
 const express = require('express');
 
 const rootDir = require('../util/path');
+const {addProduct, getAddProduct} = require("../controllers/products");
 
 const router = express.Router();
-const products = [];
-
 // /admin/add-product => GET
-router.get('/add-product', (req, res, next) => {
-  // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-  res.render('add-product',{docTitle:'Add to Products', path:'/admin/add-product', formsCss:true,productCss:true,activeAddProduct:true})
-});
+router.get('/add-product',getAddProduct);
 
 // /admin/add-product => POST
-router.post('/add-product', (req, res, next) => {
-  products.push({title:req.body.title});
-  res.redirect('/shop');
-});
+router.post('/add-product', addProduct);
 
-module.exports = {router, products};
+module.exports = {router};

@@ -1,13 +1,11 @@
 const path = require('path');
-
 const express = require('express');
 const bodyParser = require('body-parser');
 
 //for express handlebar we need to require for pug we dont
 const {engine} = require('express-handlebars');
-
-
 const app = express();
+const errorController = require("./controllers/error");
 
 
 //handlebars
@@ -27,18 +25,15 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')))
 
+app.get("/",(req,res)=>{
+    res.send("Healthy server");
+})
+
 app.use('/admin', adminRoutes);
 app.use('/shop',shopRoutes);
 
-// app.use("/",(req,res)=>{
-//     res.send("Healthy server");
-// })
 
-app.use((req, res, next) => {
-    console.log("Hi");
-    // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-    res.status(404).render('404', {pageHeading:"Page Not Found",docTitle:"404"});
-});
+app.use(errorController.get404);
 
 app.listen(3000,()=>{
     console.log("listening on port 3000");
