@@ -1,7 +1,7 @@
 const Product = require("../models/product");
 const getAddProduct = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-    res.render('add-product', { docTitle: 'Add to Products', path: '/admin/add-product', formsCss: true, productCss: true, activeAddProduct: true })
+    res.render('admin/add-product', { docTitle: 'Add to Products', path: '/admin/add-product', formsCss: true, productCss: true, activeAddProduct: true })
 }
 
 const addProduct = (req, res, next) => {
@@ -15,7 +15,7 @@ const getProducts = (req, res, next) => {
     //rrs.render is add default by express and it will use the default template engone which we set in app.js
     // const products = adminData.products;
     Product.fetchAll((data)=>{
-        res.render('shop', {
+        res.render('shop/product-list', {
             prods: data,
             docTitle: 'Shop',
             activeShop: true,
