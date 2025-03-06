@@ -10,7 +10,7 @@ const getProducts = (req, res, next) => {
             docTitle: 'Shop',
             activeShop: true,
             priductCss: true,
-            path:"/shop/product-list"
+            path:"/shop/products"
         })
     });
 }
@@ -19,7 +19,11 @@ const getProducts = (req, res, next) => {
 const getProduct = (req,res,next) => {
     const prodId = req.params?.id;
     Product.getProduct(prodId,(product)=>{
-        res.send(`<h1>${product.title}</h1>`)
+        res.render("shop/product-detail",{
+            product,
+            docTitle: product?.title,
+            path:'/shop/products'
+        });
     });
 }
 
@@ -59,6 +63,12 @@ const getOrders = (req,res,next) => {
 }
 
 
+const addToCart = (req,res,next) => {
+    const {productId} = req.body;
+    console.log(productId);
+    res.redirect("/shop/cart");
+
+}
 
 module.exports = {
     getProducts,
@@ -66,5 +76,6 @@ module.exports = {
     getCheckout,
     getCart,
     getOrders,
-    getProduct
+    getProduct,
+    addToCart  
 }
