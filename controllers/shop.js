@@ -16,6 +16,14 @@ const getProducts = (req, res, next) => {
 }
 
 
+const getProduct = (req,res,next) => {
+    const prodId = req.params?.id;
+    Product.getProduct(prodId,(product)=>{
+        res.send(`<h1>${product.title}</h1>`)
+    });
+}
+
+
 const getCart = (req,res,next) => {
     res.render("shop/cart",
         {
@@ -50,10 +58,13 @@ const getOrders = (req,res,next) => {
     })
 }
 
+
+
 module.exports = {
     getProducts,
     getIndex,
     getCheckout,
     getCart,
-    getOrders
+    getOrders,
+    getProduct
 }
