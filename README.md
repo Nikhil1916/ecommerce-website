@@ -1,1 +1,1 @@
-ecommerce webistes made via node js for backend, handlebars for template 
+ecommerce webistes made via node js for backend, handlebars as template engine 
