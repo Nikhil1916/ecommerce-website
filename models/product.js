@@ -35,7 +35,6 @@ module.exports = class Product {
     }
 
     static getProduct(id, cb) {
-        console.log(cb);
         getProductsFromFile(products=>{
             const prod = products.find(_=>_.id == id);
             cb(prod);
