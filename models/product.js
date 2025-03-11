@@ -3,7 +3,7 @@ const path = require("path");
 
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json');
 const getProductsFromFile = (cb) => {
-    console.log(p, ">>>>>>>>");
+    // console.log(p, ">>>>>>>>");
     fs.readFile(p, (err, d) => {
         if (err) {
             cb([])
