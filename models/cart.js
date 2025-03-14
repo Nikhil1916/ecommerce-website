@@ -72,4 +72,18 @@ module.exports = class Cart {
         }
     }
 
+    static fetchCart(cb) {
+        try {    
+            fs.readFile(p,(err, fileContent)=>{
+                if(err) {
+                    cb(null);
+                } else {
+                    cb(JSON.parse(fileContent));
+                }
+            })
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
 }

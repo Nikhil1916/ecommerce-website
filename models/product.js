@@ -53,8 +53,8 @@ module.exports = class Product {
             const prodIndex = products.findIndex(_=>_.id == id);
             const product = products?.[prodIndex];
             if(prodIndex>-1) products.splice(prodIndex, 1);
-            console.log(products.length, prodIndex);
-            Cart.deleteProduct(p,product.price);
+            console.log(products.length, prodIndex , product);
+            Cart.deleteProduct(product.id,product.price);
             fs.writeFile(p, JSON.stringify(products), (err)=>{});
         })
     }
