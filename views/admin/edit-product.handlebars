@@ -19,7 +19,7 @@
                 <label for="description">Description</label>
                 <textarea name="description" id="description" rows="5">{{#if isEdit}} {{product.description}}{{/if}}</textarea>
             </div>
-
+            {{#if isEdit}} <input type="hidden" value="{{product.id}}" name="id" /> {{/if}}
             <button type="submit"> {{#if isEdit}}
                 Update Product
                 {{else}}

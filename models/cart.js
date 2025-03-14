@@ -45,4 +45,31 @@ module.exports = class Cart {
 
     }
 
+    static deleteProduct(id, productPrice) {
+        try {    
+            fs.readFile(p,(err, fileContent)=>{
+                let cart = {
+                    products:[],
+                    totalPrice: 0
+                }
+                if(err) {
+                    return;
+                } else {
+                    cart = JSON.parse(fileContent);
+                }
+                const existingProduct = cart.products.find((_)=>_.id == id);
+                if (existingProduct) {
+                  cart.products = cart.products.filter((_)=>_.id != id);
+                  cart.totalPrice = +cart.totalPrice - ((+productPrice) * existingProduct.quantity);
+                  fs.writeFile(p, JSON.stringify(cart), (err) => {
+                    console.log(err);
+                  });
+                }
+    
+            })
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
 }

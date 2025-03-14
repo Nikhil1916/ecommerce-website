@@ -7,7 +7,7 @@ const getAddProduct = (req, res, next) => {
 
 const addProduct = (req, res, next) => {
     const {title, imageUrl, price, description} = req.body;
-    const product = new Product(title, imageUrl || defaultImagePath, description, price);
+    const product = new Product(null,title, imageUrl || defaultImagePath, description, price);
     product.save();
     res.redirect('/shop');
 }
@@ -36,7 +36,21 @@ const getEditProduct = (req, res, next) => {
     });
 
 }
+ 
+const postEditProduct = (req,res,next) => {
+    const {id, title, imageUrl, price, description} = req.body;
+    const product = new Product(id,title, imageUrl, description, price);
+    product.save();
+    // console.log(product);
+    res.redirect('/admin/products');
+}
+
+const deleteProduct = (req,res,next) => {
+    const { id } = req.body;
+    Product.delete(id);
+    res.redirect('/admin/products');
+}
 
 module.exports = {
-    getAddProduct, addProduct, getProducts, getEditProduct
+    getAddProduct, addProduct, getProducts, getEditProduct, postEditProduct, deleteProduct
 }
