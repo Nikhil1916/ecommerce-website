@@ -7,7 +7,6 @@ const {engine} = require('express-handlebars');
 const app = express();
 const errorController = require("./controllers/error");
 
-
 //handlebars
 //for express handlebar we need to tell express it exists for pug we dont as it is kind of built in
 app.engine("handlebars", engine({

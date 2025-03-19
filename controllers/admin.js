@@ -8,8 +8,9 @@ const getAddProduct = (req, res, next) => {
 const addProduct = (req, res, next) => {
     const {title, imageUrl, price, description} = req.body;
     const product = new Product(null,title, imageUrl || defaultImagePath, description, price);
-    product.save();
-    res.redirect('/shop');
+    product.save().then(()=>{
+        res.redirect('/shop');
+    }).catch(console.log);
 }
 
 const getProducts = (req,res,next) => {

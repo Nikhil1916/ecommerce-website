@@ -5,9 +5,9 @@ const getProducts = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     //rrs.render is add default by express and it will use the default template engone which we set in app.js
     // const products = adminData.products;
-    Product.fetchAll((data)=>{
+    Product.fetchAll().then(([row,data])=>{
         res.render('shop/product-list', {
-            prods: data,
+            prods: row,
             docTitle: 'Shop',
             activeShop: true,
             priductCss: true,
@@ -19,13 +19,14 @@ const getProducts = (req, res, next) => {
 
 const getProduct = (req,res,next) => {
     const prodId = req.params?.id;
-    Product.getProduct(prodId,(product)=>{
+    Product.getProduct(prodId).then(([product])=>{
+        console.log(product);
         res.render("shop/product-detail",{
-            product,
+            product:product?.[0],
             docTitle: product?.title,
             path:'/shop/products'
         });
-    });
+    }).catch(console.log);
 }
 
 
@@ -43,28 +44,40 @@ const getCart = (req,res,next) => {
                 }
             }
             console.log(cartProducts.length,">>>>>>>>>>>>>>>>>>>>>.cart products");
-            res.render("shop/cart",
-                {
-                    path:"/shop/cart",
-                    pageTitle:"Your Cart",
-                    products: cartProducts
-                });
+           
 
         })
+        res.render("shop/cart",
+            {
+                path:"/shop/cart",
+                pageTitle:"Your Cart",
+                products: cartProducts
+            });
     })
 
 }
 
 const getIndex = (req,res,next) => {
-    Product.fetchAll((data)=>{
-        res.render('shop/index', {
-            prods: data,
+    // Product.fetchAll((data)=>{
+    //     res.render('shop/index', {
+    //         prods: data,
+    //         docTitle: 'Shop',
+    //         activeShop: true,
+    //         priductCss: true,
+    //         path:"/shop"
+    //     })
+    // });
+    Product.fetchAll().then(([rows, fieldData])=>{
+        console.log(rows);
+        res.render("shop/index",
+            {
+                prods: rows,
             docTitle: 'Shop',
             activeShop: true,
             priductCss: true,
             path:"/shop"
-        })
-    });
+            });
+    }).catch(console.log);
 }
 
 const getCheckout = (req,res,next) => {
