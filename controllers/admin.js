@@ -41,12 +41,12 @@ const getProducts = (req,res,next) => {
 
 const getEditProduct = (req, res, next) => {
     const {id} = req.params;
-    Product.getProduct(id,(product)=>{
+    Product.findByPk(id).then((product)=>{
         if(!product) {
             return res.send("No Product Found");
         }
+        product = product.get({plain:true})
         product.price = product.price ? +product.price : 0;
-        console.log(product);
         // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
         res.render('admin/edit-product', { docTitle: 'Edit Product', path: '/admin/edit-product', formsCss: true, productCss: true, activeAddProduct: true, isEdit: true , product})
     });
@@ -55,16 +55,28 @@ const getEditProduct = (req, res, next) => {
  
 const postEditProduct = (req,res,next) => {
     const {id, title, imageUrl, price, description} = req.body;
-    const product = new Product(id,title, imageUrl, description, price);
-    product.save();
-    // console.log(product);
-    res.redirect('/admin/products');
+    Product.findByPk(id).then((product)=>{
+        if(!product) {
+            return res.send("No Product Found");
+        }
+        product.title = title;
+        product.imageUrl = imageUrl;
+        product.price = price;
+        product.description = description;
+        return product.save();
+    }).then(()=>{
+        res.redirect('/admin/products');
+    }).catch(e=>{
+        console.log("Error",e.message);
+    })
 }
 
 const deleteProduct = (req,res,next) => {
     const { id } = req.body;
-    Product.delete(id);
-    res.redirect('/admin/products');
+    Product.findByPk(id).then(_=>_.destroy()).then(_=>{
+        console.log("Product deleted");
+        res.redirect('/admin/products');
+    }).catch(_=>console.log("Error",_.message));
 }
 
 module.exports = {
