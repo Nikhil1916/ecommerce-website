@@ -5,28 +5,47 @@ const getProducts = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     //rrs.render is add default by express and it will use the default template engone which we set in app.js
     // const products = adminData.products;
-    Product.fetchAll().then(([row,data])=>{
+    // Product.fetchAll().then(([row,data])=>{
+    //     res.render('shop/product-list', {
+    //         prods: row,
+    //         docTitle: 'Shop',
+    //         activeShop: true,
+    //         priductCss: true,
+    //         path:"/shop/products"
+    //     })
+    // });
+
+    Product.findAll().then(_=>{
+        const plainProducts = _.map(product => product.get({ plain: true }));
+        // return res.send(plainProducts);
         res.render('shop/product-list', {
-            prods: row,
-            docTitle: 'Shop',
-            activeShop: true,
-            priductCss: true,
-            path:"/shop/products"
-        })
-    });
+                    prods: plainProducts,
+                    docTitle: 'Shop',
+                    activeShop: true,
+                    priductCss: true,
+                    path:"/shop/products"
+                })
+    }).catch(_=>console.log(_.message));
 }
 
 
 const getProduct = (req,res,next) => {
     const prodId = req.params?.id;
-    Product.getProduct(prodId).then(([product])=>{
-        console.log(product);
-        res.render("shop/product-detail",{
-            product:product?.[0],
-            docTitle: product?.title,
-            path:'/shop/products'
+    // Product.getProduct(prodId).then(([product])=>{
+    //     console.log(product);
+    //     res.render("shop/product-detail",{
+    //         product:product?.[0],
+    //         docTitle: product?.title,
+    //         path:'/shop/products'
+    //     });
+    // }).catch(console.log);
+    Product.findByPk(prodId).then(product=>{
+        res.render("shop/product-detail", {
+          product: product.get({ plain: true }),
+          docTitle: product.get({ plain: true })?.title,
+          path: "/shop/products",
         });
-    }).catch(console.log);
+    })
 }
 
 

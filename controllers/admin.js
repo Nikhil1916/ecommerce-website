@@ -7,21 +7,36 @@ const getAddProduct = (req, res, next) => {
 
 const addProduct = (req, res, next) => {
     const {title, imageUrl, price, description} = req.body;
-    const product = new Product(null,title, imageUrl || defaultImagePath, description, price);
-    product.save().then(()=>{
+    Product.create({
+        title,
+        imageUrl,
+        price,
+        description
+    }).then((_)=>{
+        console.log(_);
         res.redirect('/shop');
-    }).catch(console.log);
+    }).catch(_=>{
+        console.log(_.message);
+    })
 }
 
 const getProducts = (req,res,next) => {
-    Product.fetchAll((data)=>{
+    // Product.fetchAll((data)=>{
+        // res.render('admin/product-list', {
+        //     prods: data,
+        //     docTitle: 'Shop',
+        //     priductCss: true,
+        //     path:"admin/products"
+        // })
+    // });
+    Product.findAll().then(_=>{
         res.render('admin/product-list', {
-            prods: data,
+            prods: _.map(prod=>prod.get({plain:true})),
             docTitle: 'Shop',
             priductCss: true,
             path:"admin/products"
         })
-    });
+    }).catch(_=>console.log(_.message));
 }
 
 const getEditProduct = (req, res, next) => {
