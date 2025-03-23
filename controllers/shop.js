@@ -2,22 +2,8 @@ const Cart = require("../models/cart");
 const Product = require("../models/product");
 
 const getProducts = (req, res, next) => {
-    // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    //rrs.render is add default by express and it will use the default template engone which we set in app.js
-    // const products = adminData.products;
-    // Product.fetchAll().then(([row,data])=>{
-    //     res.render('shop/product-list', {
-    //         prods: row,
-    //         docTitle: 'Shop',
-    //         activeShop: true,
-    //         priductCss: true,
-    //         path:"/shop/products"
-    //     })
-    // });
-
     Product.findAll().then(_=>{
         const plainProducts = _.map(product => product.get({ plain: true }));
-        // return res.send(plainProducts);
         res.render('shop/product-list', {
                     prods: plainProducts,
                     docTitle: 'Shop',
@@ -31,14 +17,6 @@ const getProducts = (req, res, next) => {
 
 const getProduct = (req,res,next) => {
     const prodId = req.params?.id;
-    // Product.getProduct(prodId).then(([product])=>{
-    //     console.log(product);
-    //     res.render("shop/product-detail",{
-    //         product:product?.[0],
-    //         docTitle: product?.title,
-    //         path:'/shop/products'
-    //     });
-    // }).catch(console.log);
     Product.findByPk(prodId).then(product=>{
         res.render("shop/product-detail", {
           product: product.get({ plain: true }),
@@ -77,26 +55,17 @@ const getCart = (req,res,next) => {
 }
 
 const getIndex = (req,res,next) => {
-    // Product.fetchAll((data)=>{
-    //     res.render('shop/index', {
-    //         prods: data,
-    //         docTitle: 'Shop',
-    //         activeShop: true,
-    //         priductCss: true,
-    //         path:"/shop"
-    //     })
-    // });
-    Product.fetchAll().then(([rows, fieldData])=>{
-        console.log(rows);
-        res.render("shop/index",
-            {
-                prods: rows,
-            docTitle: 'Shop',
-            activeShop: true,
-            priductCss: true,
-            path:"/shop"
-            });
-    }).catch(console.log);
+    Product.findAll()
+      .then((_) => {
+        res.render("admin/product-list", {
+          prods: _.map(prod=>prod.get({plain:true})),
+          docTitle: "Shop",
+          activeShop: true,
+          priductCss: true,
+          path: "/shop",
+        });
+      })
+      .catch((_) => console.log(_.message));
 }
 
 const getCheckout = (req,res,next) => {

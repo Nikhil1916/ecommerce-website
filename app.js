@@ -31,6 +31,13 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')))
 
+app.use((req,res,next)=>{
+    User.findByPk(1).then((_)=>{
+        req.user = _;
+        next();
+    }).catch(_=>console.log(_.message));
+})
+
 app.get("/",(req,res)=>{
     res.send("Healthy server");
 })
@@ -51,12 +58,28 @@ Product.belongsTo(User, {
 
 User.hasMany(Product);
 
-sequelize.sync({force: true}).then((_)=>{
-    console.log(_);
+sequelize
+// .sync({force: true}).
+.sync()
+.then((_)=>{
+    return User.findByPk(1);
+    // console.log(_);
+})
+.then((user)=>{
+    console.log("User", user);
+    if(!user) {
+        return User.create({
+            name:"Nikhil",
+            emailId:"nikhilchawla9013@gmail.com"
+        });
+    }
+    return Promise.resolve(user);
+}).then(_=>{
     app.listen(3000,()=>{
         console.log("listening on port 3000");
     });
-}).catch((_)=>{
+})
+.catch((_)=>{
     console.log("Error",_);
 });
 
