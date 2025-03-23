@@ -10,6 +10,8 @@ const errorController = require("./controllers/error");
 const {router:adminRoutes} = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const sequelize = require("./util/database");
+const Product = require('./models/product');
+const User = require('./models/user');
 
 //handlebars
 //for express handlebar we need to tell express it exists for pug we dont as it is kind of built in
@@ -39,7 +41,17 @@ app.use('/shop',shopRoutes);
 
 app.use(errorController.get404);
 
-sequelize.sync().then((_)=>{
+
+
+// we can define other one alse
+Product.belongsTo(User, {
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
+User.hasMany(Product);
+
+sequelize.sync({force: true}).then((_)=>{
     console.log(_);
     app.listen(3000,()=>{
         console.log("listening on port 3000");
