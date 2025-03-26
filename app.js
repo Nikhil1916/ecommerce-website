@@ -12,6 +12,8 @@ const shopRoutes = require('./routes/shop');
 const sequelize = require("./util/database");
 const Product = require('./models/product');
 const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cartItem');
 
 //handlebars
 //for express handlebar we need to tell express it exists for pug we dont as it is kind of built in
@@ -50,7 +52,7 @@ app.use(errorController.get404);
 
 
 
-// we can define other one alse
+// we can define other one also
 Product.belongsTo(User, {
   constraints: true,
   onDelete: "CASCADE",
@@ -58,8 +60,14 @@ Product.belongsTo(User, {
 
 User.hasMany(Product);
 
+User.hasOne(Cart);
+// Cart.belongsTo(User);
+
+Cart.belongsToMany(Product, {through: CartItem});
+Product.belongsToMany(Cart,{through: CartItem});
+
 sequelize
-// .sync({force: true}).
+// .sync({force: true})
 .sync()
 .then((_)=>{
     return User.findByPk(1);
@@ -74,6 +82,8 @@ sequelize
         });
     }
     return Promise.resolve(user);
+}).then(user=>{
+    return user.createCart();
 }).then(_=>{
     app.listen(3000,()=>{
         console.log("listening on port 3000");
