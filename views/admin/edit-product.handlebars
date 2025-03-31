@@ -1,6 +1,6 @@
 
     <main>
-        <form class="product-form" action="{{#if isEdit}} /admin/edit-product/{{product.id}} {{else}} /admin/add-product {{/if}}" method="POST">
+        <form class="product-form" action="{{#if isEdit}} /admin/edit-product/{{product._id}} {{else}} /admin/add-product {{/if}}" method="POST">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" value="{{#if isEdit}} {{product.title}}{{/if}}">
@@ -19,7 +19,7 @@
                 <label for="description">Description</label>
                 <textarea name="description" id="description" rows="5">{{#if isEdit}} {{product.description}}{{/if}}</textarea>
             </div>
-            {{#if isEdit}} <input type="hidden" value="{{product.id}}" name="id" /> {{/if}}
+            {{#if isEdit}} <input type="hidden" value="{{product._id}}" name="id" /> {{/if}}
             <button type="submit"> {{#if isEdit}}
                 Update Product
                 {{else}}

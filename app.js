@@ -4,11 +4,12 @@ const bodyParser = require('body-parser');
 
 //for express handlebar we need to require for pug we dont
 const {engine} = require('express-handlebars');
+const mongoConnect = require("./util/database").mongoConnect;
 
 const app = express();
 const errorController = require("./controllers/error");
-// const {router:adminRoutes} = require('./routes/admin');
-// const shopRoutes = require('./routes/shop');
+const {router:adminRoutes} = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 // const Product = require('./models/product');
 // const User = require('./models/user');
 // const Cart = require('./models/cart');
@@ -37,8 +38,8 @@ app.get("/",(req,res)=>{
     res.send("Healthy server");
 })
 
-// app.use('/admin', adminRoutes);
-// app.use('/shop',shopRoutes);
+app.use('/admin', adminRoutes);
+app.use('/shop',shopRoutes);
 
 app.use(errorController.get404);
 

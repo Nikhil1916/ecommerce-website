@@ -16,7 +16,7 @@
                         <p class="product__description">{{this.description}}</p>
                     </div>
                     <div class="card__actions">
-                        <a href="/shop/products/{{this.id}}" class="btn">Details</a>
+                        <a href="/shop/products/{{this._id}}" class="btn">Details</a>
                         <form action="/shop/cart" method="POST">
                             <input type="hidden" name="productId" value="{{this.id}}" />
                             <button class="btn" type="submit">Add To Cart</button>

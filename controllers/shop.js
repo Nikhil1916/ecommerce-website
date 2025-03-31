@@ -2,10 +2,9 @@ const Cart = require("../models/cart");
 const Product = require("../models/product");
 
 const getProducts = (req, res, next) => {
-    Product.findAll().then(_=>{
-        const plainProducts = _.map(product => product.get({ plain: true }));
+    Product.fetchAll().then(_=>{
         res.render('shop/product-list', {
-                    prods: plainProducts,
+                    prods: _,
                     docTitle: 'Shop',
                     activeShop: true,
                     priductCss: true,
@@ -17,10 +16,11 @@ const getProducts = (req, res, next) => {
 
 const getProduct = (req,res,next) => {
     const prodId = req.params?.id;
-    Product.findByPk(prodId).then(product=>{
+    Product.findById(prodId).then(product=>{
+        console.log(product);
         res.render("shop/product-detail", {
-          product: product.get({ plain: true }),
-          docTitle: product.get({ plain: true })?.title,
+          product: product,
+          docTitle: product?.title,
           path: "/shop/products",
         });
     })
@@ -44,10 +44,10 @@ const getCart = (req,res,next) => {
 }
 
 const getIndex = (req,res,next) => {
-    Product.findAll()
+    Product.fetchAll()
       .then((_) => {
         res.render("admin/product-list", {
-          prods: _.map(prod=>prod.get({plain:true})),
+          prods: _,
           docTitle: "Shop",
           activeShop: true,
           priductCss: true,
@@ -106,10 +106,10 @@ const deleteItemFromCart = (req,res,next) => {
 module.exports = {
     getProducts,
     getIndex,
-    getCheckout,
-    getCart,
-    getOrders,
-    getProduct,
-    addToCart,
-    deleteItemFromCart
+    //getCheckout,
+    //getCart,
+    // getOrders,
+     getProduct,
+    // addToCart,
+    // deleteItemFromCart
 }
