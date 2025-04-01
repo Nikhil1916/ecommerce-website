@@ -10,8 +10,10 @@ const addProduct = async(req, res, next) => {
         price,
         description,
         imageUrl,
+        null,
+        req.user._id
     )
-    
+    console.log(NewProduct,"new prod");
     await NewProduct.save();
     res.redirect('/shop');
 }

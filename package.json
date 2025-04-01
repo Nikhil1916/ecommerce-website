@@ -8,10 +8,10 @@
     "start": "npx nodemon app.js",
     "start-server": "node app.js"
   },
-  "author": "Maximilian Schwarzmüller",
+  "author": "Nikhil Chawla",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.19.4"
   },
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.5",

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 //for express handlebar we need to require for pug we dont
 const {engine} = require('express-handlebars');
 const mongoConnect = require("./util/database").mongoConnect;
+const User = require("./models/user");
 
 const app = express();
 const errorController = require("./controllers/error");
@@ -36,6 +37,16 @@ app.use(express.static(path.join(__dirname,'public')))
 
 app.get("/",(req,res)=>{
     res.send("Healthy server");
+});
+
+app.use((req,res,next)=>{
+    User.findById("67ec11ffd5af4cb28d11ee9b").then(_=>{
+        req.user = _;
+        next();
+    }).catch(_=>{
+        console.log("Error in app.js user middleware", _.message);
+        next();
+    })
 })
 
 app.use('/admin', adminRoutes);
