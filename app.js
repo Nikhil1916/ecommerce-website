@@ -1,8 +1,6 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-
-//for express handlebar we need to require for pug we dont
 const {engine} = require('express-handlebars');
 const mongoConnect = require("./util/database").mongoConnect;
 const User = require("./models/user");
@@ -11,10 +9,6 @@ const app = express();
 const errorController = require("./controllers/error");
 const {router:adminRoutes} = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-// const Product = require('./models/product');
-// const User = require('./models/user');
-// const Cart = require('./models/cart');
-// const CartItem = require('./models/cartItem');
 const {connectToDb} = require('./util/database');
 
 //handlebars
@@ -27,11 +21,6 @@ app.engine("handlebars", engine({
 app.set('view engine', 'handlebars');
 app.set('views', 'views');
 
-//pug
-//to set values globaally 
-// app.set('view engine', 'pug');
-// app.set('views', 'views');
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')))
 
@@ -41,7 +30,8 @@ app.get("/",(req,res)=>{
 
 app.use((req,res,next)=>{
     User.findById("67ec11ffd5af4cb28d11ee9b").then(_=>{
-        req.user = _;
+        req.user = new User(_.username,_.email,_.cart,_._id);
+        console.log(req.user);
         next();
     }).catch(_=>{
         console.log("Error in app.js user middleware", _.message);
