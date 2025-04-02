@@ -106,6 +106,44 @@ class User {
     )
 
   }
+
+  addOrder() {
+    const _db = getDb();
+    return this.getCart().then(products=>{
+      const order = {
+        items: products,
+        user: {
+          _id: new ObjectId(this._id),
+          name: this.username,
+          email: this.email
+        }
+      }
+      return _db.collection("orders").insertOne(order).then(_=>{
+        this.cart = {
+          items:[]
+        }
+        return _db.collection("users").updateOne(
+          {
+              _id:new ObjectId(this._id)
+          },
+          {
+              $set:{
+                  cart: {
+                    items: []
+                  }
+              }
+          }
+      )
+      });
+    })
+  }
+
+  getOrders() {
+    const _db = getDb();
+    return _db.collection("orders").find({
+      "user._id":this._id
+    }).toArray();
+  }
 }
 
 module.exports = User;
