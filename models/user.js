@@ -26,16 +26,27 @@ class User {
   }
 
   addToCart(product) {
-    // const cartProduct = this.cart.items.findIndex((cp) => {
-    //   return cp._id == product._id;
-    // });
+    if(!this.cart || !this.cart.items) {
+      this.cart = {
+        items:[]
+      }
+    }
+    const cartProductIndex = this.cart?.items?.findIndex((cp) => {
+      return cp.productId.toString() == product._id.toString();
+    });
+    let quantity = 1;
+    const cart = [...this.cart.items];
+    if(cartProductIndex>=0) {
+      quantity = this.cart.items[cartProductIndex].quantity + 1;
+      cart[cartProductIndex].quantity = quantity;
+    } else {
+      cart.push({
+        productId: new ObjectId(product._id),
+        quantity,
+      });
+    }
     const updatedCart = {
-        items:[
-            {
-                productId: new ObjectId(product._id),
-                quantity: 1
-            }
-        ]
+      items: cart
     }
     const db = getDb();
     db.collection("users").updateOne(
@@ -62,6 +73,38 @@ class User {
       .catch((_) => {
         console.log(_.message);
       });
+  }
+
+  getCart() {
+    const _db = getDb();
+    return _db.collection("products").find({
+      _id:{
+        $in: [...this.cart.items.map(_=>_?.productId)]
+      }
+    }).toArray().then(products=>{
+      return products.map(p=>{
+        return {...p, quantity: this.cart.items.find(_=>_.productId.toString() == p._id.toString())?.quantity}
+      })
+    });
+  }
+
+
+  deleteItemFromCart(prodId) {
+    const items = this.cart.items.filter(_=>_?.productId.toString()!=prodId.toString());
+    const _db = getDb();
+    return _db.collection("users").updateOne(
+        {
+            _id:new ObjectId(this._id)
+        },
+        {
+            $set:{
+                cart: {
+                  items
+                }
+            }
+        }
+    )
+
   }
 }
 

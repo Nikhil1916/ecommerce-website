@@ -1,12 +1,8 @@
-const path = require('path');
-
 const express = require('express');
-
-const rootDir = require('../util/path');
-
 const router = express.Router();
-
 const shopController = require("../controllers/shop");
+
+
 
 router.get('/', shopController.getIndex);
 
@@ -14,7 +10,7 @@ router.get("/products", shopController.getProducts);
 
 router.get("/products/:id", shopController.getProduct);
 
-// router.get("/cart", shopController.getCart);
+router.get("/cart", shopController.getCart);
 
 router.post("/cart", shopController.addToCart);
 
@@ -23,7 +19,7 @@ router.post("/cart", shopController.addToCart);
 // router.get("/orders", shopController.getOrders);
 
 
-// router.post("/delete-item", shopController.deleteItemFromCart);
+router.post("/delete-item", shopController.deleteItemFromCart);
 
 
 module.exports = router;

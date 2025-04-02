@@ -1,4 +1,3 @@
-const Cart = require("../models/cart");
 const Product = require("../models/product");
 
 const getProducts = (req, res, next) => {
@@ -28,13 +27,11 @@ const getProduct = (req,res,next) => {
 
 
 const getCart = (req,res,next) => {
-    req.user.getCart().then(cart=>{
-       return cart.getProducts();
-    }).then((_)=>{
+    req.user.getCart().then((_)=>{
         res.render("shop/cart", {
             path: "/shop/cart",
             pageTitle: "Your Cart",
-            products: _.map((product)=>product.get({plain:true})),
+            products: _,
           });
     })
     .catch(err=>{
@@ -87,8 +84,7 @@ const addToCart = (req,res,next) => {
 
 const deleteItemFromCart = (req,res,next) => {
     const {id} = req.body;
-    Product.getProduct(id,(product)=>{
-        Cart.deleteProduct(id, product.price);
+    req.user.deleteItemFromCart(id).then(_=>{
         res.redirect("/shop/cart")
     })
 }
@@ -97,9 +93,9 @@ module.exports = {
     getProducts,
     getIndex,
     //getCheckout,
-    //getCart,
+    getCart,
     // getOrders,
      getProduct,
      addToCart,
-    // deleteItemFromCart
+    deleteItemFromCart
 }
