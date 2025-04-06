@@ -1,25 +1,23 @@
-const Product = require("../models/product");
+const {Product} = require("../models/product");
 const getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', { docTitle: 'Add to Products', path: '/admin/add-product', formsCss: true, productCss: true, activeAddProduct: true })
 }
 
 const addProduct = async(req, res, next) => {
     const {title, imageUrl, price, description} = req.body;
-    const NewProduct = new Product(
-        title,
-        price,
-        description,
-        imageUrl,
-        null,
-        req.user._id
-    )
+    const NewProduct = new Product({
+      title,
+      price,
+      description,
+      imageUrl,
+    });
     console.log(NewProduct,"new prod");
     await NewProduct.save();
     res.redirect('/shop');
 }
 
 const getProducts = (req,res,next) => {
-    Product.fetchAll().then(_=>{
+    Product.find().lean().then(_=>{
         res.render('admin/product-list', {
             prods: _,
             docTitle: 'Shop',
@@ -31,7 +29,7 @@ const getProducts = (req,res,next) => {
 
 const getEditProduct = (req, res, next) => {
     const {id} = req.params;
-     Product.findById(id).then((product)=>{
+     Product.findById(id).lean().then((product)=>{
         if(!product) {
             return res.send("No Product Found");
         }
@@ -47,8 +45,11 @@ const postEditProduct = async(req,res,next) => {
         if(!product) {
             return res.send("No Product Found");
         }
-        const updatedP = new Product(title, price, description, imageUrl, id);
-        await updatedP.save();
+        product.title = title;
+        product.price = price;
+        product.description = description;
+        product.imageUrl = imageUrl;
+        await product.save();
         res.redirect('/admin/products');
     }).catch(e=>{
         console.log("Error",e.message);
@@ -57,7 +58,7 @@ const postEditProduct = async(req,res,next) => {
 
 const deleteProduct = (req,res,next) => {
     const { id } = req.body;
-    Product.deleteById(id).then(_=>{
+    Product.findByIdAndDelete(id).then(_=>{
         console.log("Product deleted");
         res.redirect('/admin/products');
     }).catch(_=>console.log("Error",_.message));
