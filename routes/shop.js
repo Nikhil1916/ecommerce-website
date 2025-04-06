@@ -10,16 +10,16 @@ router.get("/products", shopController.getProducts);
 
 router.get("/products/:id", shopController.getProduct);
 
-// router.get("/cart", shopController.getCart);
+router.get("/cart", shopController.getCart);
 
-// router.post("/cart", shopController.addToCart);
+router.post("/cart", shopController.addToCart);
 
 // // router.get("/checkout", shopController.getCheckout);
 
 // router.get("/orders", shopController.getOrders);
 
 
-// router.post("/delete-item", shopController.deleteItemFromCart);
+router.post("/delete-item", shopController.deleteItemFromCart);
 
 // router.post("/create-order", shopController.postOrder);
 

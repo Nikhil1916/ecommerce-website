@@ -10,6 +10,7 @@ const addProduct = async(req, res, next) => {
       price,
       description,
       imageUrl,
+      userId: req.user
     });
     console.log(NewProduct,"new prod");
     await NewProduct.save();
@@ -17,7 +18,7 @@ const addProduct = async(req, res, next) => {
 }
 
 const getProducts = (req,res,next) => {
-    Product.find().lean().then(_=>{
+    Product.find().populate("userId").lean().then(_=>{
         res.render('admin/product-list', {
             prods: _,
             docTitle: 'Shop',

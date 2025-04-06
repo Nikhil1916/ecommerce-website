@@ -27,11 +27,19 @@ const getProduct = (req,res,next) => {
 
 
 const getCart = (req,res,next) => {
-    req.user.getCart().then((_)=>{
+    req.user.populate("cart.items.productId").then((_)=>{
+        const products = _.cart.items.map(item => {
+            const product = item.productId.toObject(); // Convert populated product to plain object
+            return {
+              ...product,
+              quantity: item.quantity
+            };
+          });
+        
         res.render("shop/cart", {
             path: "/shop/cart",
             pageTitle: "Your Cart",
-            products: _,
+            products,
           });
     })
     .catch(err=>{
@@ -91,7 +99,7 @@ const postOrder = (req,res,next) => {
 
 const deleteItemFromCart = (req,res,next) => {
     const {id} = req.body;
-    req.user.deleteItemFromCart(id).then(_=>{
+    req.user.removeFromCart(id).then(_=>{
         res.redirect("/shop/cart")
     })
 }
