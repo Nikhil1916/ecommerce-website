@@ -1,3 +1,4 @@
+const { Order } = require("../models/order");
 const {Product} = require("../models/product");
 
 const getProducts = (req, res, next) => {
@@ -71,11 +72,13 @@ const getCheckout = (req,res,next) => {
 }
 
 const getOrders = (req,res,next) => {
-    req.user.getOrders().then(_=>{
+    Order.find({
+        "user.user_id": req.user._id
+    }).then(_=>{
         return res.json({
             _
-        });
-    })
+        })
+    });
 }
 
 
@@ -92,9 +95,28 @@ const addToCart = (req,res,next) => {
 }
 
 const postOrder = (req,res,next) => {
-    req.user.addOrder().then(_=>{
+   req.user.populate("cart.items.productId").then((_) => {
+    const products = _.cart.items.map((item) => {
+      const product = item.productId.toObject(); // Convert populated product to plain object
+      return {
+        product,
+        quantity: item.quantity,
+      };
+    });
+
+    const order = new Order({
+        user:{
+            name:req.user.username,
+            user_id: req.user._id
+        },
+        products
+      });
+
+      order.save().then(_=>{
+        req.user.clearCart();
         res.redirect("/orders");
-    })
+      })
+  });
 }
 
 const deleteItemFromCart = (req,res,next) => {
@@ -105,13 +127,13 @@ const deleteItemFromCart = (req,res,next) => {
 }
 
 module.exports = {
-    getProducts,
-    getIndex,
-    //getCheckout,
-    getCart,
-     getOrders,
-     getProduct,
-     addToCart,
-    deleteItemFromCart,
-    postOrder
-}
+  getProducts,
+  getIndex,
+  //getCheckout,
+  getCart,
+  getOrders,
+  getProduct,
+  addToCart,
+  deleteItemFromCart,
+  postOrder,
+};
